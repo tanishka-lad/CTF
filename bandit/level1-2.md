@@ -1,58 +1,63 @@
 
 ---
 
-## 🧩 Level Goal
+# 🟡 Bandit Level 1 → Level 2 – Handling Special Filenames
+
+### 📌 Level Goal
 > The password for the next level is stored in a file called `-` located in the home directory.
 
 ---
 
-## 🧠 The Challenge
-The filename is literally a **dash (`-`)**, which is tricky because most Linux commands interpret `-` as an **option flag**, not a filename.
+## 🛠️ Commands Used
 
-So if you run:
 ```bash
-cat -
+cd ~          # Navigate to home directory
+ls -l         # List files with details
+cat ./-       # Read the file named "-"
 ```
-It won’t read the file—it’ll wait for input from your keyboard (stdin), which is not what we want.
 
 ---
 
-## ✅ Solution – Step-by-Step
+## 🔍 Step-by-Step Breakdown
 
-1. **Navigate to the home directory** (if you're not already there):
-   ```bash
-   cd ~
-   ```
+1. **`cd ~`**  
+   - Moves to the user's home directory (`/home/bandit1`).
 
-2. **List the files** to confirm the presence of `-`:
-   ```bash
-   ls -l
-   ```
+2. **`ls -l`**  
+   - Lists all files with metadata.  
+   - Confirms the presence of a file literally named `-`.
 
-3. **Read the file safely using `cat`**:
-   ```bash
-   cat ./-
-   ```
+3. **`cat ./-`**  
+   - Reads the contents of the file named `-`.  
+   - The `./` prefix tells the shell to treat `-` as a filename, not a command-line option.
 
-   ✅ Why this works:
-   - `./-` tells the shell: “This is a file named `-` in the current directory.”
-   - The `./` prefix avoids confusion with command-line options.
+---
+
+## ⚠️ Why `cat -` Doesn’t Work
+
+- `cat -` reads from **standard input**, not the file named `-`.
+- Without `./`, the shell misinterprets the filename as an option.
 
 ---
 
 ## 🔑 Password Found
 
-Once you run `cat ./-`, you’ll see the password for **Bandit Level 2**. Use it to log in like this:
+```text
+263JGJPfgU6LtdEvgfWU1XP5yac29mFx
+```
+
+Use this to log into **Bandit Level 2**:
 ```bash
 ssh bandit2@bandit.labs.overthewire.org -p 2220
 ```
 
 ---
 
-## 🧠 Bonus: Why This Matters in CTFs
+## 🧠 Reflection
 
-- Filenames like `-`, `--`, or even `..` are used to test your understanding of shell behavior.
-- Knowing how to escape or prefix special characters is key in adversarial environments.
+This level teaches:
+- How special characters in filenames can affect command behavior.
+- The importance of **prefixing with `./`** to disambiguate filenames from options.
+- A subtle but powerful lesson in shell parsing—critical for adversarial analysis and CTFs.
 
 ---
-
